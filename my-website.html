@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard</title>
+  <style>
+    :root {
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+      --text-main: #2d3748;
+      --text-muted: #718096;
+      --accent: #3182ce;
+      --border-radius: 12px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Grid Layout: 3 Columns */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* Floating Card Boxes */
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    /* Spans across all 3 columns */
+    .card-full-width {
+      grid-column: 1 / -1;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #edf2f7;
+      color: var(--text-main);
+    }
+
+    .link-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .link-item a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      display: inline-block;
+      transition: color 0.15s ease;
+    }
+
+    .link-item a:hover {
+      color: #1a56db;
+      text-decoration: underline;
+    }
+
+    .card-content {
+      color: var(--text-main);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>My Dashboard</h1>
+    </header>
+
+    <main class="dashboard-grid" id="grid"></main>
+  </div>
+
+  <script>
+    // ==========================================
+    // 1. EDIT YOUR 3-COLUMN LINK GROUPS HERE
+    // ==========================================
+    const linkGroups = [
+      {
+        title: "Productivity",
+        links: [
+          { name: "My GitHub Site", url: "http://davidf628.github.io/" },
+          { name: "Overleaf", url: "https://www.overleaf.com/" },
+          { name: "Typst", url: "https://typst.app/"},
+          { name: "Gmail", url: "https://mail.google.com" },
+          { name: "Google Drive", url: "https://drive.google.com" },
+          { name: "Google Calendar", url: "https://calendar.google.com/calendar/r" },
+          { name: "Google Sheets", url: "https://docs.google.com/spreadsheets/u/0/" },
+          { name: "Old Homepage", url: "https://sites.google.com/site/drfhomepage/" },
+
+        ]
+      },
+      {
+        title: "Interests",
+        links: [
+          { name: "Project Euler", url: "http://projecteuler.net/" },
+          { name: "DuoLingo", url: "http://www.duolingo.com/" },
+          { name: "YouTube", url: "http://www.youtube.com/" },
+          { name: "Doenet", url: "https://doenet.org/" },
+          { name: "JSX Graph", url: "https://jsxgraph.uni-bayreuth.de/home/" },
+        ]
+      },
+      {
+        title: "CofC",
+        links: [
+          { name: "MyPortal", url: "https://myportal.cofc.edu/" },
+          { name: "MyOpenMath", url: "https://www.myopenmath.com/" },
+          { name: "OAKS", url: "https://cofc.brightspace.com/d2l/login" },
+          { name: "TI-84 (Chrome Only)", url: "https://84plusce.ti.com/8eu/main-view" },
+          { name: "TI-84", url: "https://ti84calculator.io/" },
+          { name: "TI-30", url: "https://aldenbradford.com/calculator_emulator/" },
+          { name: "XYZ Homework", url: "http://www.xyzhomework.com/" },
+          { name: "Calendar Editor", url: "https://davidf628.github.io/calendar-editor/" },
+          { name: "Grade Predictor", url: "https://davidf628.github.io/grade-predictor/" },
+          { name: "Math Worksheets", url: "https://www.kutasoftware.com/free.html" },
+          { name: "Math Applets", url: "http://nlvm.usu.edu/en/nav/topic_t_2.html" }
+        ]
+      },
+      {
+        title: "Data",
+        links: [
+          { name: "Climate Reanalyzer", url: "https://climatereanalyzer.org/clim/t2_daily/?dm_id=world" },
+          { name: "National Weather Service", url: "https://digital.weather.gov/?barbs=false&coords=latlon&element=8&email=1e9d36d25fc681850cbec5c55886e4f551ddb04e&emaila=bf380c704402bd283191adcde17b1fd9&emailb=e7daf438dc3a783b88280fc92e94edfc23d097e50e5ae7be663b65409505cf2c&lat=37&layers=F000BTTTFTT%C2%AEion%3D0&lon=-96.5&mxmz=false&subl=TFFFFF&tunits=localt&units=english&utm_source=pocket_saves&wunits=nautical&zoom=4" },
+
+        ]
+      },
+      {
+        title: "Local Pages",
+        links: [
+          { name: "Roster Converter", url: "https://192-168-1-247.davidf628.direct.quickconnect.to:2600/" },
+          { name: "Tab2ChordPro", url: "http://192-168-1-247.davidf628.direct.quickconnect.to:2700/" },
+          { name: "DiffChecker", url: "https://192-168-1-247.davidf628.direct.quickconnect.to:6191/" },
+          { name: "Setlist Reorder", url: "https://davidf628.github.io/setlist-reorder/" },
+          { name: "Playlist Compare", url: "https://192-168-1-247.davidf628.direct.quickconnect.to:2500/" }
+        ]
+      }
+    ];
+
+    // ==========================================
+    // 2. EDIT YOUR FULL-WIDTH BOXES HERE
+    // ==========================================
+    const fullWidthCards = [
+    //  {
+    //    title: "Interests & Hobbies",
+    //    content: "<p>A place for note-taking, project ideas, reading lists, or tracking current hobbies.</p>"
+     // },
+    //  {
+    //    title: "Current Projects",
+    //    content: "<p><strong>Project A:</strong> Working on website UI redesign.<br><strong>Project B:</strong> Learning Rust and web development fundamentals.</p>"
+    //  }
+    ];
+
+    // ==========================================
+    // RENDER LOGIC
+    // ==========================================
+    function renderDashboard() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+
+      // Render 3-column link cards
+      linkGroups.forEach(group => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const title = document.createElement('h2');
+        title.className = 'card-title';
+        title.textContent = group.title;
+        card.appendChild(title);
+
+        const ul = document.createElement('ul');
+        ul.className = 'link-list';
+
+        group.links.forEach(link => {
+          const li = document.createElement('li');
+          li.className = 'link-item';
+          
+          const a = document.createElement('a');
+          a.href = link.url;
+          a.textContent = link.name;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+
+        card.appendChild(ul);
+        grid.appendChild(card);
+      });
+
+      // Render full-width cards
+      fullWidthCards.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card card-full-width';
+
+        const title = document.createElement('h2');
+        title.className = 'card-title';
+        title.textContent = item.title;
+        card.appendChild(title);
+
+        const content = document.createElement('div');
+        content.className = 'card-content';
+        content.innerHTML = item.content;
+        card.appendChild(content);
+
+        grid.appendChild(card);
+      });
+    }
+
+    renderDashboard();
+  </script>
+</body>
+</html>
